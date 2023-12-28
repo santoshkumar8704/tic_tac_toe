@@ -2,22 +2,31 @@ import { useState } from "react";
 import GameBoard from "./GameBoard";
 import Player from "./Player";
 import Log from "./Log";
+function deriveActivePlayer (prevTurns){
+  let currentPlayer = "X";
+  if(prevTurns.length >0 && prevTurns[0].player === "X"){
+    currentPlayer = "O";
+  }
+  return currentPlayer;
+
+}
 
 function App() {
-  const [activeplayer, setActivePlayer] = useState("X");
+  
   const [gameTurns, setGameTurns] = useState([]);
+  const activeplayer = deriveActivePlayer(gameTurns);
   function handleActivePlayer(rowid, colid) {
     setGameTurns((prevTurns) => {
-      const currentPlayer = activeplayer; // Use the currently active player
+      const currentPlayer = deriveActivePlayer(prevTurns); // Use the currently active player
 
       // Toggle the player for the next turn
-      const nextPlayer = currentPlayer === "X" ? "O" : "X";
+  
 
       const updatedTurns = [
-        ...prevTurns,
-        { square: { row: rowid, col: colid }, player: currentPlayer },
+        
+        { square: { row: rowid, col: colid }, player: currentPlayer },...prevTurns,
       ];
-      setActivePlayer(nextPlayer); // Set the next player as active
+     // Set the next player as active
       return updatedTurns;
     });
   }
